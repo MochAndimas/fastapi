@@ -1,0 +1,63 @@
+import logging
+import datetime
+from functools import lru_cache
+from pydantic_settings import BaseSettings
+from decouple import config
+
+
+class Settings(BaseSettings):
+    """
+    Common settings for all environments.
+    """
+    API_V1_STR: str = "/api/v1"
+    PROJECT_NAME: str = "Gooddreamer Data API V1.0"
+
+    # Sqlite database
+    SQLITE_DB_URL: str = "sqlite+aiosqlite:///./app/db/external_api.db"
+
+    # JWT
+    JWT_SECRET_KEY: str = config("JWT_SECRET_KEY", cast=str)
+    JWT_REFRESH_SECRET_KEY: str = config("JWT_REFRESH_SECRET_KEY", cast=str)
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = config("ACCESS_TOKEN_EXPIRE_MINUTES", cast=int)
+    REFRESH_TOKEN_EXPIRE_DAYS: int = config("REFRESH_TOKEN_EXPIRE_DAYS", cast=int)
+    ALGORITHM: str = "HS256"
+
+class ProductionSettings(Settings):
+    """
+    Production-specific settings.
+    """
+    DEBUG: bool = False
+
+    # DATABASE
+    DB_URL: str = config("DB_URL", cast=str)
+    HOST: str = config("HOST", cast=str)
+    PORT: int = config("PORT", cast=int)
+    
+
+class DevelopmentSettings(Settings):
+    """
+    Development-specific settings.
+    """
+    DEBUG: bool = True
+
+    # DATABASE
+    DB_URL: str = config("DEV_DB_URL", cast=str)
+    HOST: str = config("DEV_HOST", cast=str)
+    PORT: int = config("DEV_PORT", cast=int)
+    
+
+@lru_cache
+def get_settings() -> Settings:
+    """
+    Load settings based on the environment.
+    """
+    env = config("ENV", cast=str)
+
+    if env == "production":
+        print("Loading production settings")
+        return ProductionSettings()
+    else:
+        print("Loading development settings")
+        return DevelopmentSettings()
+
+settings = get_settings()

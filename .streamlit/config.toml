@@ -1,0 +1,6 @@
+[server]
+port=5504
+enableCORS=true
+enableXsrfProtection=true
+maxMessageSize=2000
+enableWebsocketCompression=true

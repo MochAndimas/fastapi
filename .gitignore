@@ -27,17 +27,21 @@ share/python-wheels/
 MANIFEST
 
 # Streamlit congig
-# streamlit_app/.streamlit/*
-# config.toml
-# secrets.toml
+streamlit_app/.streamlit/*
+config.toml
+secrets.toml
+./streamlit/*
 
 # ASA Credentials
 private-key.pem
 public-key.pem
 
 # MYSQl file
-# app_data.db
-# external_api.db
+app_data.db
+external_api.db
+
+# Requirements library
+requirements.txt
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
